@@ -410,23 +410,51 @@ class ReadingSettings {
   }
 
   applyBrightness() {
-    // Применяем яркость к article с book-content - именно здесь задается фон через CSS переменную
-    const bookContent = document.querySelector("article.book-content");
-    if (bookContent) {
-      bookContent.style.filter = `brightness(${this.currentSettings.brightness})`;
-    }
+    const brightness = this.currentSettings.brightness;
+    
+    // Применяем яркость ко всем CSS переменным reader
+    const root = document.documentElement;
+    
+    // Получаем базовые цвета из текущей темы
+    const currentTheme = this.themes[this.currentSettings.theme] || this.themes.dark;
+    
+    Object.keys(currentTheme).forEach(variable => {
+      if (variable !== 'name') {
+        const originalColor = currentTheme[variable];
+        const adjustedColor = this.adjustColorBrightness(originalColor, brightness);
+        root.style.setProperty(variable, adjustedColor);
+      }
+    });
     
     // Обновляем слайдер
     const brightnessSlider = document.getElementById("brightness-slider");
     if (brightnessSlider) {
-      brightnessSlider.value = this.currentSettings.brightness;
+      brightnessSlider.value = brightness;
     }
     
     // Обновляем отображение значения
     const brightnessDisplay = document.getElementById("brightness-display");
     if (brightnessDisplay) {
-      brightnessDisplay.textContent = `${Math.round(this.currentSettings.brightness * 100)}%`;
+      brightnessDisplay.textContent = `${Math.round(brightness * 100)}%`;
     }
+  }
+
+  // Функция для изменения яркости цвета
+  adjustColorBrightness(color, brightness) {
+    // Конвертируем hex в RGB
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);  
+    const b = parseInt(hex.substr(4, 2), 16);
+    
+    // Применяем яркость (умножаем на коэффициент)
+    const newR = Math.round(Math.min(255, r * brightness));
+    const newG = Math.round(Math.min(255, g * brightness));
+    const newB = Math.round(Math.min(255, b * brightness));
+    
+    // Конвертируем обратно в hex
+    const toHex = (n) => n.toString(16).padStart(2, '0');
+    return `#${toHex(newR)}${toHex(newG)}${toHex(newB)}`;
   }
 
   applyTheme(themeName) {
@@ -441,6 +469,9 @@ class ReadingSettings {
 
     this.currentSettings.theme = themeName;
     this.updateActiveTheme(themeName);
+    
+    // Повторно применяем яркость после смены темы
+    this.applyBrightness();
   }
 
   updateActiveTheme(themeName) {

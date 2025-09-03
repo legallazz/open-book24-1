@@ -802,9 +802,10 @@ class BookReader {
     const expandIcon = document.querySelector(".fullscreen-expand");
     const compressIcon = document.querySelector(".fullscreen-compress");
     const fullscreenBtn = document.getElementById("fullscreen-toggle");
+    const readingMenu = document.querySelector(".reading-menu");
     
     if (document.fullscreenElement) {
-      // В полноэкранном режиме
+      // В полноэкранном режиме - скрываем верхнее меню
       if (expandIcon && compressIcon) {
         expandIcon.style.display = "none";
         compressIcon.style.display = "inline";
@@ -812,14 +813,20 @@ class BookReader {
       if (fullscreenBtn) {
         fullscreenBtn.title = "Выйти из полноэкранного режима";
       }
+      if (readingMenu) {
+        readingMenu.style.display = "none";
+      }
     } else {
-      // Не в полноэкранном режиме
+      // Не в полноэкранном режиме - показываем верхнее меню
       if (expandIcon && compressIcon) {
         expandIcon.style.display = "inline";
         compressIcon.style.display = "none";
       }
       if (fullscreenBtn) {
         fullscreenBtn.title = "Полноэкранный режим";
+      }
+      if (readingMenu) {
+        readingMenu.style.display = "block";
       }
     }
   }
