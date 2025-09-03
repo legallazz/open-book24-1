@@ -410,11 +410,11 @@ class ReadingSettings {
   }
 
   applyBrightness() {
-    const readingContent = document.querySelector(".reading-content");
-    if (!readingContent) return;
+    const readingModal = document.getElementById("reading-modal");
+    if (!readingModal) return;
 
-    // Применяем яркость ко всему контейнеру чтения (включая фон)
-    readingContent.style.filter = `brightness(${this.currentSettings.brightness})`;
+    // Применяем яркость ко всему модальному окну чтения (весь интерфейс включая фон, меню, текст)
+    readingModal.style.filter = `brightness(${this.currentSettings.brightness})`;
     
     // Обновляем слайдер
     const brightnessSlider = document.getElementById("brightness-slider");
