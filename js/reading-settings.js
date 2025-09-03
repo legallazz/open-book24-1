@@ -410,11 +410,11 @@ class ReadingSettings {
   }
 
   applyBrightness() {
-    const bookContent = document.getElementById("book-content");
-    if (!bookContent) return;
+    const readingContent = document.querySelector(".reading-content");
+    if (!readingContent) return;
 
-    // Применяем яркость через CSS фильтр
-    bookContent.style.filter = `brightness(${this.currentSettings.brightness})`;
+    // Применяем яркость ко всему контейнеру чтения (включая фон)
+    readingContent.style.filter = `brightness(${this.currentSettings.brightness})`;
     
     // Обновляем слайдер
     const brightnessSlider = document.getElementById("brightness-slider");
