@@ -89,8 +89,17 @@ class ReadingSettings {
   init() {
     this.setupEventListeners();
     this.loadSettings();
-    this.applyAllSettings();
-    this.setupReadingMode();
+    
+    // Убеждаемся, что все настройки применяются после загрузки DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.applyAllSettings();
+        this.setupReadingMode();
+      });
+    } else {
+      this.applyAllSettings();
+      this.setupReadingMode();
+    }
 
     // Обновление прогресса при загрузке контента
     window.addEventListener("bookContentLoaded", () => {
@@ -472,6 +481,9 @@ class ReadingSettings {
     
     // Повторно применяем яркость после смены темы
     this.applyBrightness();
+    
+    // Сохраняем настройки после применения темы
+    this.saveSettings();
   }
 
   updateActiveTheme(themeName) {
@@ -509,6 +521,7 @@ class ReadingSettings {
   }
 
   applyAllSettings() {
+    console.log("Applying all settings:", this.currentSettings);
     this.applyFontSettings();
     this.applyTheme(this.currentSettings.theme);
     this.applyBrightness();
