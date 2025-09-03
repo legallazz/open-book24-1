@@ -250,6 +250,12 @@ class BookReader {
       readingColorBtn.addEventListener("click", () => this.openColorSettings());
     }
 
+    // Fullscreen toggle button
+    const fullscreenBtn = document.getElementById("fullscreen-toggle");
+    if (fullscreenBtn) {
+      fullscreenBtn.addEventListener("click", () => this.toggleFullscreen());
+    }
+
     // Theme selector
     const themeSelector = document.getElementById("theme-selector");
     if (themeSelector) {
@@ -286,6 +292,12 @@ class BookReader {
         this.saveReadingProgress();
       }
     }, 10000); // Save every 10 seconds
+
+    // Слушатель для изменения полноэкранного режима
+    document.addEventListener("fullscreenchange", () => this.updateFullscreenIcon());
+    document.addEventListener("webkitfullscreenchange", () => this.updateFullscreenIcon());
+    document.addEventListener("mozfullscreenchange", () => this.updateFullscreenIcon());
+    document.addEventListener("MSFullscreenChange", () => this.updateFullscreenIcon());
   }
 
   startReading() {
@@ -759,6 +771,57 @@ class BookReader {
     `;
 
     document.head.appendChild(style);
+  }
+
+  // Полноэкранный режим
+  toggleFullscreen() {
+    const readingModal = document.getElementById("reading-modal");
+    
+    if (!document.fullscreenElement) {
+      // Входим в полноэкранный режим
+      if (readingModal.requestFullscreen) {
+        readingModal.requestFullscreen();
+      } else if (readingModal.webkitRequestFullscreen) {
+        readingModal.webkitRequestFullscreen();
+      } else if (readingModal.msRequestFullscreen) {
+        readingModal.msRequestFullscreen();
+      }
+    } else {
+      // Выходим из полноэкранного режима
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+  }
+
+  updateFullscreenIcon() {
+    const expandIcon = document.querySelector(".fullscreen-expand");
+    const compressIcon = document.querySelector(".fullscreen-compress");
+    const fullscreenBtn = document.getElementById("fullscreen-toggle");
+    
+    if (document.fullscreenElement) {
+      // В полноэкранном режиме
+      if (expandIcon && compressIcon) {
+        expandIcon.style.display = "none";
+        compressIcon.style.display = "inline";
+      }
+      if (fullscreenBtn) {
+        fullscreenBtn.title = "Выйти из полноэкранного режима";
+      }
+    } else {
+      // Не в полноэкранном режиме
+      if (expandIcon && compressIcon) {
+        expandIcon.style.display = "inline";
+        compressIcon.style.display = "none";
+      }
+      if (fullscreenBtn) {
+        fullscreenBtn.title = "Полноэкранный режим";
+      }
+    }
   }
 
   // Public API methods

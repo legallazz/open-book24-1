@@ -195,6 +195,11 @@
             </div>
             <!-- В reading-menu-right -->
             <div class="reading-menu-right">
+               <!-- Кнопка полноэкранного режима -->
+               <button id="fullscreen-toggle" class="menu-btn" title="Полноэкранный режим">
+                  <i class="fas fa-expand fullscreen-expand"></i>
+                  <i class="fas fa-compress fullscreen-compress" style="display: none;"></i>
+               </button>
                <!-- Кнопка скрытия/раскрытия меню -->
                <button id="toggle-menu-visibility" class="menu-btn" title="Скрыть меню">
                   <i class="fas fa-eye-slash"></i>
@@ -263,6 +268,18 @@
                   Пример текста для предварительного просмотра настроек шрифта и
                   выравнивания.
                </p>
+            </div>
+         </div>
+
+         <!-- Яркость -->
+         <div class="settings-group">
+            <label>Яркость</label>
+            <div class="font-controls">
+               <div class="brightness-control">
+                  <i class="fas fa-sun brightness-icon"></i>
+                  <input type="range" id="brightness-slider" min="0.3" max="1.0" step="0.1" value="1.0" class="brightness-slider">
+                  <span id="brightness-display">100%</span>
+               </div>
             </div>
          </div>
 

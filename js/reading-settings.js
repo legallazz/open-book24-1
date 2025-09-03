@@ -6,6 +6,7 @@ class ReadingSettings {
       textAlign: "justify",
       readingMode: "scroll",
       theme: "dark",
+      brightness: 1.0,
     };
 
     this.fontOptions = [
@@ -140,6 +141,12 @@ class ReadingSettings {
     this.setupButton("reading-color-settings", () => this.openSettings());
     this.setupButton("settings-close", () => this.closeSettings());
 
+    // Регулятор яркости
+    const brightnessSlider = document.getElementById("brightness-slider");
+    if (brightnessSlider) {
+      brightnessSlider.addEventListener("input", (e) => this.changeBrightness(parseFloat(e.target.value)));
+    }
+
     // Закрытие настроек при клике вне
     document.addEventListener("click", (e) => {
       const sidebar = document.getElementById("settings-sidebar");
@@ -181,6 +188,18 @@ class ReadingSettings {
     this.currentSettings.fontFamily = font;
     this.applyFontSettings();
     this.saveSettings();
+  }
+
+  changeBrightness(brightness) {
+    this.currentSettings.brightness = brightness;
+    this.applyBrightness();
+    this.saveSettings();
+    
+    // Обновляем отображение значения
+    const brightnessDisplay = document.getElementById("brightness-display");
+    if (brightnessDisplay) {
+      brightnessDisplay.textContent = `${Math.round(brightness * 100)}%`;
+    }
   }
 
   setTextAlign(align) {
@@ -390,6 +409,26 @@ class ReadingSettings {
     }
   }
 
+  applyBrightness() {
+    const bookContent = document.getElementById("book-content");
+    if (!bookContent) return;
+
+    // Применяем яркость через CSS фильтр
+    bookContent.style.filter = `brightness(${this.currentSettings.brightness})`;
+    
+    // Обновляем слайдер
+    const brightnessSlider = document.getElementById("brightness-slider");
+    if (brightnessSlider) {
+      brightnessSlider.value = this.currentSettings.brightness;
+    }
+    
+    // Обновляем отображение значения
+    const brightnessDisplay = document.getElementById("brightness-display");
+    if (brightnessDisplay) {
+      brightnessDisplay.textContent = `${Math.round(this.currentSettings.brightness * 100)}%`;
+    }
+  }
+
   applyTheme(themeName) {
     if (!this.themes[themeName]) return;
 
@@ -441,6 +480,7 @@ class ReadingSettings {
   applyAllSettings() {
     this.applyFontSettings();
     this.applyTheme(this.currentSettings.theme);
+    this.applyBrightness();
     this.updateButtonStates();
   }
 
