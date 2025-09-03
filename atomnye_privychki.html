@@ -16,6 +16,95 @@
    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
    <link rel="shortcut icon" href="/favicon/favicon.ico" />
    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+   
+   <!-- Предотвращение мелькания темы -->
+   <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('reading-settings');
+        if (saved) {
+          const settings = JSON.parse(saved);
+          const themes = {
+            dark: {
+              "--reader-background": "#111827",
+              "--reader-page": "#1e293b",
+              "--reader-text": "#f8fafc",
+              "--reader-border": "#111827"
+            },
+            "dark-blue": {
+              "--reader-background": "#171717",
+              "--reader-page": "#202124",
+              "--reader-text": "#f1f5f9",
+              "--reader-border": "#171717"
+            },
+            "dark-warm": {
+              "--reader-background": "#1c1917",
+              "--reader-page": "#292524",
+              "--reader-text": "#e7e5e4",
+              "--reader-border": "#1c1917"
+            },
+            light: {
+              "--reader-background": "#f8fafc",
+              "--reader-page": "#ffffff",
+              "--reader-text": "#1f2937",
+              "--reader-border": "#e5e7eb"
+            },
+            "light-warm": {
+              "--reader-background": "#7e7e8f",
+              "--reader-page": "#c6c6d5",
+              "--reader-text": "#202020",
+              "--reader-border": "#7e7e8f"
+            },
+            sepia: {
+              "--reader-background": "#f5e6d3",
+              "--reader-page": "#fdf6e3",
+              "--reader-text": "#644339",
+              "--reader-border": "#f5e6d3"
+            },
+            blue: {
+              "--reader-background": "#edf2f7",
+              "--reader-page": "#e2e8f0",
+              "--reader-text": "#2d3748",
+              "--reader-border": "#bdc4c8"
+            },
+            green: {
+              "--reader-background": "#e6ddd6",
+              "--reader-page": "#faf8f2",
+              "--reader-text": "#302d27",
+              "--reader-border": "#e6e7e0"
+            }
+          };
+          
+          const theme = themes[settings.theme] || themes.dark;
+          const brightness = settings.brightness || 1.0;
+          const root = document.documentElement;
+          
+          // Функция для изменения яркости цвета
+          function adjustColorBrightness(color, brightness) {
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.substr(0, 2), 16);
+            const g = parseInt(hex.substr(2, 2), 16);  
+            const b = parseInt(hex.substr(4, 2), 16);
+            
+            const newR = Math.round(Math.min(255, r * brightness));
+            const newG = Math.round(Math.min(255, g * brightness));
+            const newB = Math.round(Math.min(255, b * brightness));
+            
+            const toHex = (n) => n.toString(16).padStart(2, '0');
+            return '#' + toHex(newR) + toHex(newG) + toHex(newB);
+          }
+          
+          // Применяем тему с яркостью
+          Object.keys(theme).forEach(variable => {
+            const adjustedColor = adjustColorBrightness(theme[variable], brightness);
+            root.style.setProperty(variable, adjustedColor);
+          });
+        }
+      } catch(e) {
+        // Ignore errors, fallback to default theme
+      }
+    })();
+   </script>
 </head>
 
 <body>
