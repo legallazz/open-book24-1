@@ -2,13 +2,13 @@
 .settings-sidebar {
   position: fixed;
   top: 0;
-  right: -300px;
-  width: 300px;
+  right: -100vw;
+  width: 100vw;
   height: 100vh;
   background: var(--background-primary);
   border-left: 1px solid var(--border-color);
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 999999;
   transition: right 0.3s ease;
   overflow-y: auto;
 }
@@ -49,7 +49,35 @@
 }
 
 .settings-content {
-  padding: 1rem;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Стили для полноэкранного режима */
+.settings-sidebar.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-header {
+  flex-shrink: 0;
+}
+
+.settings-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 1rem;
+    max-width: none;
+  }
 }
 
 /* Прогресс-бар в модальном окне чтения */

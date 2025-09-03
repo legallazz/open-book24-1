@@ -410,14 +410,8 @@ class ReadingSettings {
   }
 
   applyBrightness() {
-    // Применяем яркость к контейнеру с содержимым чтения
-    const readingContent = document.querySelector(".reading-content");
-    if (readingContent) {
-      readingContent.style.filter = `brightness(${this.currentSettings.brightness})`;
-    }
-    
-    // Дублируем применение яркости к самому book-content для надежности
-    const bookContent = document.getElementById("book-content");
+    // Применяем яркость к article с book-content - именно здесь задается фон через CSS переменную
+    const bookContent = document.querySelector("article.book-content");
     if (bookContent) {
       bookContent.style.filter = `brightness(${this.currentSettings.brightness})`;
     }
